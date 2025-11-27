@@ -64,7 +64,7 @@ def download_binance_ohlcv(symbol: str, start_date: str, end_date: str) -> pd.Da
 
     Returns:
         DataFrame containing OHLCV data with columns:
-        [Open Time, Open, High, Low, Close, Volume, Close Time]
+        [Open Time, Open, High, Low, Close, Volume]
 
     Raises:
         BinanceAPIException: If there's an error with the Binance API
@@ -142,7 +142,7 @@ def download_yahoo_ohlcv(symbol: str, start_date: str, end_date: str) -> pd.Data
 
     Returns:
         DataFrame containing OHLCV data with columns:
-        [Date, Open, High, Low, Close, Volume]
+        [Open Time, Open, High, Low, Close, Volume]
 
     Raises:
         Exception: If there's an error downloading data
@@ -308,6 +308,13 @@ def main():
     try:
         validate_date(args.start)
         validate_date(args.end)
+
+        # Ensure start date is not after end date
+        start_dt = datetime.strptime(args.start, "%Y-%m-%d")
+        end_dt = datetime.strptime(args.end, "%Y-%m-%d")
+        if start_dt > end_dt:
+            print(f"Error: Start date ({args.start}) cannot be after end date ({args.end})")
+            sys.exit(1)
     except ValueError as e:
         print(f"Error: {e}")
         sys.exit(1)
