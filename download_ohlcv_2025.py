@@ -9,12 +9,15 @@ This script downloads OHLCV (Open, High, Low, Close, Volume) data for:
 Data can be downloaded for all assets or individually, with customizable date ranges.
 
 Usage:
-    # Download all assets with default date range (2025-01-01 to present)
+    # Download BTCUSDT with default date range (2025-01-01 to present)
     python download_ohlcv_2025.py
 
     # Download specific asset(s)
     python download_ohlcv_2025.py --asset btcusdt
     python download_ohlcv_2025.py --asset ethusdt --asset xauusd
+
+    # Download all three assets
+    python download_ohlcv_2025.py --asset btcusdt --asset ethusdt --asset xauusd
 
     # Download with custom date range
     python download_ohlcv_2025.py --start 2025-01-15 --end 2025-03-01
@@ -207,12 +210,15 @@ def parse_arguments():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-    # Download all assets with default date range (2025-01-01 to present)
+    # Download BTCUSDT with default date range (2025-01-01 to present)
     python download_ohlcv_2025.py
 
     # Download specific asset(s)
     python download_ohlcv_2025.py --asset btcusdt
     python download_ohlcv_2025.py --asset ethusdt --asset xauusd
+
+    # Download all three assets
+    python download_ohlcv_2025.py --asset btcusdt --asset ethusdt --asset xauusd
 
     # Download with custom date range
     python download_ohlcv_2025.py --start 2025-01-15 --end 2025-03-01
@@ -228,7 +234,7 @@ Examples:
         choices=SUPPORTED_ASSETS,
         help="Asset to download (can be specified multiple times). "
              "Options: btcusdt, ethusdt, xauusd. "
-             "If not specified, downloads all assets."
+             "If not specified, downloads BTCUSDT only."
     )
 
     parser.add_argument(
@@ -320,7 +326,8 @@ def main():
         sys.exit(1)
 
     # Determine which assets to download
-    assets_to_download = args.asset if args.asset else SUPPORTED_ASSETS
+    # Default to BTCUSDT only if no assets specified
+    assets_to_download = args.asset if args.asset else ["btcusdt"]
 
     print("=" * 60)
     print("OHLCV Data Downloader")
